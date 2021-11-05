@@ -1,15 +1,12 @@
-using MediatR;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Reactivities.API.Extensions;
+using Reactivities.API.Middleware;
 using Reactivities.Application.Activities;
-using Reactivities.Application.Core;
-using Reactivities.Persistence.Data;
 
 namespace Reactivities.API
 {
@@ -26,16 +23,20 @@ namespace Reactivities.API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblyContaining<Create>();
+            });
             services.AddApplicationServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reactivities.API v1"));
             }
