@@ -43,3 +43,7 @@ rgb(33, 138, 174) 69%, rgb(32, 167,172) 89%) !important;
 }
 
 /*end home page styles*/
+
+.react-datepicker-wrapper{
+  width:100%;
+}
