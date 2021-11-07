@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Reactivities.Domain;
 using Reactivities.Persistence.Data;
 using Reactivities.Persistence.Data.Persistence;
 using System;
@@ -21,6 +23,7 @@ namespace Reactivities.API
             var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
             var logger = services.GetRequiredService<ILogger<Program>>();
+            var userManager = services.GetRequiredService<UserManager<AppUser>>();
 
             try
             {
@@ -30,7 +33,7 @@ namespace Reactivities.API
                 logger.LogInformation($"successfully created database in class - {nameof(Program)}, Time - {DateTime.Now}");
 
                 logger.LogInformation($"About seeding database in class - {nameof(Program)}, Time - {DateTime.Now}");
-                await Seed.SeedData(context);
+                await Seed.SeedData(context, userManager);
                 logger.LogInformation($"Database seeding successful in class - {nameof(Program)}, Time - {DateTime.Now}");
             }
             catch (Exception exception)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Activities;
 using Reactivities.Application.Core;
 using Reactivities.Domain;
